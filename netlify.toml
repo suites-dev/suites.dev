@@ -273,6 +273,11 @@ to = "/docs/get-started/"
 status = 301
 
 [[redirects]]
+from = "/docs/fundamentals/adapters"
+to = "/docs/get-started/installation/#supported-libraries-adapters"
+status = 301
+
+[[redirects]]
 from = "/docs/guides/adapters/inversifyjs"
 to = "/docs/guides/inversify/"
 status = 301

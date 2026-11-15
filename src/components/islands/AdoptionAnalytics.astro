@@ -1,0 +1,21 @@
+<script>
+  import { copiedCodeEvent } from '@/lib/adoptionAnalytics.js';
+  import { trackEvent } from '@/utils/analytics';
+
+  // Expressive Code adds this feedback only after a successful clipboard copy.
+  // Observing feedback avoids counting failed clipboard attempts as adoption.
+  const observer = new MutationObserver(records => {
+    for (const record of records) {
+      for (const node of record.addedNodes) {
+        if (!(node instanceof HTMLElement) || !node.matches('.feedback')) continue;
+        const button = node.parentElement?.matches('.expressive-code .copy')
+          ? node.parentElement.querySelector<HTMLButtonElement>('button[data-code]')
+          : null;
+        if (!button) continue;
+        const event = copiedCodeEvent(window.location.pathname, button.dataset.code ?? '');
+        if (event) trackEvent(event.name, event.params);
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
