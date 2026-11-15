@@ -3,6 +3,7 @@ import DocsHeader from '@/components/site/Header.astro';
 import MarketingHeader from '@/components/site/MarketingHeader.astro';
 import Footer from '@/components/site/Footer.astro';
 import GoogleAnalytics from '@/components/islands/GoogleAnalytics.astro';
+import AdoptionAnalytics from '@/components/islands/AdoptionAnalytics.astro';
 import '@/styles/globals.css';
 import { DEFAULT_SOCIAL_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL, pageTitle } from '@/config/seo';
 
@@ -219,5 +220,6 @@ const graph = canonicalUrl && !preventIndexing ? {
       <slot />
     </main>
     {showFooter && <Footer />}
+    {process.env.CONTEXT === 'production' && <AdoptionAnalytics />}
   </body>
 </html>
