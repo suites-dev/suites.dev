@@ -15,7 +15,7 @@ import Topbar from '@/components/ui/Topbar.astro';
 import ThemeToggle from '@/components/site/ThemeToggle.astro';
 
 const marketingNavLinks = [
-  { label: 'Documentation', href: '/docs/get-started/' },
+  { label: 'Documentation', href: '/docs/' },
   { label: 'Quick start', href: '/docs/get-started/quickstart/' },
   {
     label: 'Examples',
@@ -44,6 +44,8 @@ const marketingMobileResources = [
       <a
         class="marketing-nav-link"
         href={link.href}
+        data-track={link.label === 'Quick start' ? 'quick_start' : undefined}
+        data-track-location={link.label === 'Quick start' ? 'homepage_header' : undefined}
         {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         <span>{link.label}</span>
@@ -81,6 +83,8 @@ const marketingMobileResources = [
             <a
               class="marketing-mobile-link"
               href={link.href}
+              data-track={link.label === 'Quick start' ? 'quick_start' : undefined}
+              data-track-location={link.label === 'Quick start' ? 'homepage_mobile_menu' : undefined}
             >
               <span>{link.label}</span>
               <small>

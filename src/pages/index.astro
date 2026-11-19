@@ -148,7 +148,7 @@ const { unit, unitRef } = await TestBed
         </p>
 
         <nav class="hero-actions" aria-label="Get started with Suites">
-          <a class="cta cta--primary" href="/docs/get-started/" data-track="read_the_docs">Read the Docs</a>
+          <a class="cta cta--primary" href="/docs/get-started/quickstart/" data-track="quick_start" data-track-location="homepage_hero">Write your first test</a>
           <a
             class="cta cta--icon"
             href="https://github.com/suites-dev/suites"
@@ -165,7 +165,7 @@ const { unit, unitRef } = await TestBed
             <span>GitHub</span>
           </a>
         </nav>
-        <p class="hero-note">Open source. Built for dependency injection.</p>
+        <p class="hero-note">Choose your framework. Follow a complete test example.</p>
       </div>
       <div class="hero-preview">
         <div class="preview-heading"><span class="file-tab">user.service.spec.ts</span><span class="preview-language">TypeScript</span></div>
@@ -240,7 +240,7 @@ const { unit, unitRef } = await TestBed
             Create the unit and its dependency mocks in one step. Keep setup
             short so the behavior you arrange, run, and assert is easy to find.
           </p>
-          <a class="cap-link" href="/docs/get-started/quickstart/">
+          <a class="cap-link" href="/docs/get-started/quickstart/" data-track="quick_start" data-track-location="homepage_features">
             See quick start <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -284,19 +284,20 @@ const { unit, unitRef } = await TestBed
         <div class="cap-code"><Code code={aiFirst} lang="ts" /></div>
       </section>
     </div>
-    <section class="closing-cta" aria-labelledby="closing-title"><div><p class="eyebrow">START WITH ONE CLASS</p><h2 id="closing-title">Write your first Suites test.</h2><p>Choose your framework and runner. Follow the same simple pattern.</p></div><a class="cta cta--primary" href="/docs/get-started/quickstart/">Open the quickstart <span aria-hidden="true">→</span></a></section>
+    <section class="closing-cta" aria-labelledby="closing-title"><div><p class="eyebrow">START WITH ONE CLASS</p><h2 id="closing-title">Write your first Suites test.</h2><p>Choose your framework and runner. Follow the same simple pattern.</p></div><a class="cta cta--primary" href="/docs/get-started/quickstart/" data-track="quick_start" data-track-location="homepage_footer">Write your first test <span aria-hidden="true">→</span></a></section>
   </div>
 </MarketingLayout>
 
 <script>
-  // The Docusaurus homepage tracked these clicks through trackButtonClick.
-  // Importing the util installs its window shim; the listener keeps the
-  // markup free of inline handlers.
-  import { trackButtonClick } from '@/utils/analytics';
+  import { trackButtonClick, trackEvent } from '@/utils/analytics';
 
   document.querySelectorAll<HTMLElement>('[data-track]').forEach((el) => {
     el.addEventListener('click', () => {
-      trackButtonClick(el.dataset.track as string, 'homepage_hero');
+      const location = el.dataset.trackLocation ?? 'homepage_hero';
+      trackButtonClick(el.dataset.track as string, location);
+      if (el.dataset.track === 'quick_start') {
+        trackEvent('quickstart_click', { cta_location: location });
+      }
     });
   });
 </script>
