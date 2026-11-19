@@ -66,8 +66,6 @@ describe('User Service', () => {
 }`;
 
 const heroExample = `import { TestBed } from '@suites/unit';
-import { UserService } from './user.service';
-import { UserRepository } from './user.repository';
 
 const { unit, unitRef } = await TestBed
   .solitary(UserService)
@@ -76,8 +74,7 @@ const { unit, unitRef } = await TestBed
 const repository = unitRef.get(UserRepository);
 repository.getUserById.mockResolvedValue(user);
 
-expect(await unit.getUserName(user.id))
-  .toBe(user.name);`;
+expect(await unit.getUserName(user.id)).toBe(user.name);`;
 
 const supportedFrameworks = [
   { name: 'NestJS', icon: '/img/nestjs-logo.png' },
@@ -140,15 +137,16 @@ const { unit, unitRef } = await TestBed
   <div class="home workbench">
     <section class="home-hero" aria-labelledby="home-title">
       <div class="hero-shell">
-        <p class="eyebrow"><span class="brand-dot" aria-hidden="true"></span> SUITES / TYPESCRIPT UNIT TESTING</p>
         <h1 id="home-title" class="hero-title">Project Suites.</h1>
         <p class="hero-lede">
           A unit testing framework for TypeScript backends working with
           inversion of control and dependency injection
         </p>
 
-        <nav class="hero-actions" aria-label="Get started with Suites">
-          <a class="cta cta--primary" href="/docs/get-started/" data-track="read_the_docs">Read the Docs</a>
+        <div class="hero-cta">
+          <p class="hero-note">Choose your framework. Follow a complete test example.</p>
+          <nav class="hero-actions" aria-label="Get started with Suites">
+          <a class="cta cta--primary" href="/docs/get-started/quickstart/" data-track="quick_start" data-track-location="homepage_hero">Write your first test</a>
           <a
             class="cta cta--icon"
             href="https://github.com/suites-dev/suites"
@@ -164,13 +162,12 @@ const { unit, unitRef } = await TestBed
             </svg>
             <span>GitHub</span>
           </a>
-        </nav>
-        <p class="hero-note">Open source. Built for dependency injection.</p>
+          </nav>
+        </div>
       </div>
       <div class="hero-preview">
-        <div class="preview-heading"><span class="file-tab">user.service.spec.ts</span><span class="preview-language">TypeScript</span></div>
+        <div class="preview-heading"><span class="file-tab">user.service.spec.ts</span></div>
         <Code code={heroExample} lang="ts" />
-        <div class="preview-footer"><span class="preview-check" aria-hidden="true">✓</span> Real unit. Typed mocks. Ready to test.</div>
       </div>
     </section>
 
@@ -208,7 +205,7 @@ const { unit, unitRef } = await TestBed
       </div>
     </section>
 
-    <div class="section-intro"><p class="eyebrow">A SMALL API. A CLEARER TEST.</p><h2>Make room for the behavior<br />that matters.</h2></div>
+    <div class="section-intro"><h2>Testing with Suites</h2></div>
     <div class="capabilities">
 
       <section class="cap" aria-labelledby="cap-standards">
@@ -240,7 +237,7 @@ const { unit, unitRef } = await TestBed
             Create the unit and its dependency mocks in one step. Keep setup
             short so the behavior you arrange, run, and assert is easy to find.
           </p>
-          <a class="cap-link" href="/docs/get-started/quickstart/">
+          <a class="cap-link" href="/docs/get-started/quickstart/" data-track="quick_start" data-track-location="homepage_features">
             See quick start <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -284,44 +281,42 @@ const { unit, unitRef } = await TestBed
         <div class="cap-code"><Code code={aiFirst} lang="ts" /></div>
       </section>
     </div>
-    <section class="closing-cta" aria-labelledby="closing-title"><div><p class="eyebrow">START WITH ONE CLASS</p><h2 id="closing-title">Write your first Suites test.</h2><p>Choose your framework and runner. Follow the same simple pattern.</p></div><a class="cta cta--primary" href="/docs/get-started/quickstart/">Open the quickstart <span aria-hidden="true">→</span></a></section>
+    <section class="closing-cta" aria-labelledby="closing-title"><div><p class="eyebrow">START WITH ONE CLASS</p><h2 id="closing-title">Write your first Suites test.</h2><p>Choose your framework and runner. Follow the same simple pattern.</p></div><a class="cta cta--primary" href="/docs/get-started/quickstart/" data-track="quick_start" data-track-location="homepage_footer">Write your first test <span aria-hidden="true">→</span></a></section>
   </div>
 </MarketingLayout>
 
 <script>
-  // The Docusaurus homepage tracked these clicks through trackButtonClick.
-  // Importing the util installs its window shim; the listener keeps the
-  // markup free of inline handlers.
-  import { trackButtonClick } from '@/utils/analytics';
+  import { trackButtonClick, trackEvent } from '@/utils/analytics';
 
   document.querySelectorAll<HTMLElement>('[data-track]').forEach((el) => {
     el.addEventListener('click', () => {
-      trackButtonClick(el.dataset.track as string, 'homepage_hero');
+      const location = el.dataset.trackLocation ?? 'homepage_hero';
+      trackButtonClick(el.dataset.track as string, location);
+      if (el.dataset.track === 'quick_start') {
+        trackEvent('quickstart_click', { cta_location: location });
+      }
     });
   });
 </script>
 
 <style>
   .workbench { width: min(100%,1200px); margin-inline:auto; padding:0 var(--ui-gutter) 80px; }
-  .home-hero { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); align-items:center; gap:56px; padding:88px 0 64px; }
+  .home-hero { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); align-items:stretch; gap:56px; padding:64px 0 48px; }
   .hero-shell,.hero-preview { min-width:0; }
+  .hero-shell { display:flex; flex-direction:column; }
   .eyebrow { display:block; width:auto; padding:0; border:0; border-radius:0; background:none; margin:0 0 20px; font-family:var(--font-code); font-size:.6875rem; font-weight:500; letter-spacing:.1em; line-height:1.6; color:var(--text-muted); }
-  .hero-shell .eyebrow { display:flex; gap:10px; align-items:center; }
-  .brand-dot { width:7px; height:7px; border-radius:50%; background:var(--primary-light); }
   .hero-title { margin:0 0 24px; font-family:var(--font-title); font-size:clamp(2.75rem,4.5vw,4rem); font-weight:600; line-height:1.06; letter-spacing:-.055em; }
   .hero-title span { color:var(--primary-light); }
   .hero-lede { max-width:38ch; margin:0 0 28px; font-size:1.125rem; line-height:1.7; color:var(--text-muted); text-wrap:pretty; }
   .hero-actions { display:flex; flex-wrap:wrap; gap:12px; }
+  .hero-cta { margin-top:auto; }
   .cta { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:48px; padding:12px 22px; border:1px solid var(--control-border); border-radius:6px; background:var(--bg); color:var(--text); font-size:.875rem; font-weight:600; text-decoration:none; transition:background 180ms,border-color 180ms; }
   .cta--primary { background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
-  .hero-note { margin:18px 0 0; font-size:.75rem; color:var(--text-soft); }
+  .hero-note { margin:0 0 18px; font-size:.75rem; color:var(--text-soft); }
   .hero-preview { border:1px solid var(--border-strong); border-radius:12px; overflow:hidden; background:var(--code-bg); box-shadow:0 16px 48px -24px color-mix(in srgb,var(--text) 18%,transparent); }
   .preview-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 20px; border-bottom:1px solid var(--border); background:var(--surface); font-family:var(--font-code); font-size:.6875rem; }
-  .preview-language { color:var(--text-soft); }
   .hero-preview :global(.expressive-code pre) { border:0; border-radius:0; font-size:.75rem; line-height:1.85; }
   .hero-preview :global(.expressive-code .frame) { border:0; }
-  .preview-footer { display:flex; align-items:center; gap:10px; padding:14px 20px; font-size:.75rem; color:var(--text-muted); border-top:1px solid var(--border); background:var(--surface); }
-  .preview-check { color:var(--success); font-size:1rem; }
   .ecosystem { display:grid; grid-template-columns:1fr 1.8fr 1fr; align-items:center; gap:32px; padding:32px 0; border-block:1px solid var(--border); }
   .ecosystem-intro .eyebrow { margin-bottom:8px; }
   .ecosystem-intro>p:last-child { margin:0; color:var(--text-muted); font-size:.875rem; line-height:1.6; }
@@ -363,6 +358,6 @@ const { unit, unitRef } = await TestBed
   @media(hover:hover) { .cta:hover { background:var(--surface-hover); border-color:var(--primary-light); } .cta--primary:hover { background:var(--primary-hover); color:var(--on-primary-hover); } }
   @media(max-width:1050px) { .home-hero { gap:32px; } .ecosystem { grid-template-columns:minmax(0,1.8fr) minmax(0,1fr); } .ecosystem-intro { grid-column:1 / -1; display:flex; align-items:center; gap:32px; } .ecosystem-intro>p:last-child br { display:none; } .ecosystem ul { gap:20px; } .cap { column-gap:40px; } }
   @media(max-width:800px) { .home-hero { grid-template-columns:1fr; padding-top:56px; gap:40px; } .hero-lede { max-width:48ch; } .hero-title { font-size:clamp(2.75rem,7vw,3.75rem); } .rule-head { align-items:flex-start; } .rule-head>p { display:none; } .cap { grid-template-columns:1fr; row-gap:16px; } .cap h2 { max-width:32ch; } .cap-code { grid-column:1; grid-row:3; } .cap-heading { gap:12px; } .cap-copy { max-width:54ch; } .closing-cta { align-items:flex-start; flex-direction:column; } }
-  @media(max-width:600px) { .ecosystem { grid-template-columns:1fr; gap:24px; } .ecosystem-intro { display:block; } .ecosystem-intro .eyebrow { margin-bottom:8px; } .ecosystem ul { flex-wrap:wrap; column-gap:20px; row-gap:16px; } .ecosystem li { font-size:.75rem; gap:6px; } .stack-icon { flex-basis:28px; width:28px; } .stack-icon img { width:24px; height:24px; } .ecosystem-group h2 { margin-bottom:10px; } .compare { margin-block:48px 64px; } .rule-head { padding:24px 20px; } .compare-tray { padding:12px; } .compare-tray :global(.tab) { padding-inline:12px; } .section-intro { margin-bottom:32px; } .cap { padding-block:32px; } .closing-cta { padding:28px 24px; margin-top:32px; } .preview-heading { padding:14px; } .preview-language { display:none; } }
+  @media(max-width:600px) { .ecosystem { grid-template-columns:1fr; gap:24px; } .ecosystem-intro { display:block; } .ecosystem-intro .eyebrow { margin-bottom:8px; } .ecosystem ul { flex-wrap:wrap; column-gap:20px; row-gap:16px; } .ecosystem li { font-size:.75rem; gap:6px; } .stack-icon { flex-basis:28px; width:28px; } .stack-icon img { width:24px; height:24px; } .ecosystem-group h2 { margin-bottom:10px; } .compare { margin-block:48px 64px; } .rule-head { padding:24px 20px; } .compare-tray { padding:12px; } .compare-tray :global(.tab) { padding-inline:12px; } .section-intro { margin-bottom:32px; } .cap { padding-block:32px; } .closing-cta { padding:28px 24px; margin-top:32px; } .preview-heading { padding:14px; } }
   @media(prefers-reduced-motion:reduce) { .cta { transition:none; } }
 </style>
